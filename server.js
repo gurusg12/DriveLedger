@@ -12,6 +12,7 @@ import { updateUser } from "./src/updateUser.js";
 import { uploadfiles } from "./src/CRUD/upload.js";
 import { login_user } from "./src/CRUD/login_user.js";
 import { all_uploads } from "./src/CRUD/all_uploads.js";
+import { add_agent } from "./src/CRUD/add_agent.js";
 
 
 dotenv.config();
@@ -28,15 +29,13 @@ app.get("/auth/google/callback", callback);
 
 app.post("/updateUser", updateUser);
 
-
 app.post("/login", login_user);
-
 
 app.post("/upload", upload.single("file"), uploadfiles);
 
 app.get("/alluploads/:user_id", all_uploads)
 
-
+app.post('/add/agent' , add_agent)
 
 app.get("/files", async (req, res) => {
     const drive = getDriveClient();
