@@ -25,9 +25,7 @@ export const callback = async (req, res) => {
             auth: oauth2Client
         });
         const { data } = await oauth2.userinfo.get();
-
         const tokenparse = JSON.parse(tokens)
-
         db.prepare(`
         INSERT INTO users (
             id,
@@ -45,8 +43,6 @@ export const callback = async (req, res) => {
         JSON.stringify(tokens)
     );
         res.send("✅ Login Successful! token.json created");
-
-
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);

@@ -7,6 +7,8 @@ import upload from "./multerConfig.js";
 import { google } from "googleapis";
 import getDriveClient from "./driveClient.js";
 import { callback, login } from "./src/login.js";
+import { updateUser } from "./src/updateUser.js";
+import { uploadfiles } from "./src/CRUD/upload.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -18,42 +20,12 @@ app.get("/login", login);
 
 app.get("/auth/google/callback", callback);
 
-app.post("/upload", upload.single("file"), async (req, res) => {
-    const drive = getDriveClient();
+app.post("/updateUser/:id", updateUser);
 
-    try {
 
-        const FOLDER_ID = "1HEjNmBNt3_w_eRx01NZ5UeLz4DTmi1-W";
+app.post("/upload", upload.single("file"), uploadfiles);
 
-        const response = await drive.files.create({
-            requestBody: {
-                name: req.file.originalname,
-                parents: [FOLDER_ID], // Upload to this folder
-            },
-            media: {
-                mimeType: req.file.mimetype,
-                body: fs.createReadStream(req.file.path),
-            },
-            fields: "id,name,webViewLink",
-        });
 
-        fs.unlinkSync(req.file.path);
-
-        res.json({
-            success: true,
-            file: response.data,
-        });
-
-    } catch (err) {
-
-        res.status(500).json({
-            success: false,
-            error: err.message,
-        });
-
-    }
-
-});
 
 app.get("/files", async (req, res) => {
     const drive = getDriveClient();
