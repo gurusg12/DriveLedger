@@ -2,7 +2,8 @@ import { google } from "googleapis";
 import oauth2Client from "../googleAuth.js";
 import db from "./db.js";
 import { get_token } from "../config/get_token.js";
-export const login = function (req, res) {
+
+export const signup = function (req, res) {
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline",
         prompt: "consent",
@@ -12,8 +13,11 @@ export const login = function (req, res) {
             "https://www.googleapis.com/auth/userinfo.profile"
         ]
     });
-    res.redirect(url);
+     res.json({
+        url: url
+    });
 }
+
 export const callback = async (req, res) => {
 
     const code = req.query.code;
@@ -25,7 +29,8 @@ export const callback = async (req, res) => {
             auth: oauth2Client
         });
         const { data } = await oauth2.userinfo.get();
-        const tokenparse = JSON.parse(tokens)
+        
+        
         db.prepare(`
         INSERT INTO users (
             id,
@@ -42,7 +47,7 @@ export const callback = async (req, res) => {
         data.picture,
         JSON.stringify(tokens)
     );
-        res.send("✅ Login Successful! token.json created");
+        res.redirect("http://localhost:5173/login");
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);

@@ -1,13 +1,12 @@
 import db from "./db.js";
 
 export const updateUser  = (req, res) => {
-    const { id } = req.params;
-    const { password, folder_id } = req.body;
+    const { password, folder_id , email} = req.body;
 
     try {
         const user = db.prepare(
-            "SELECT * FROM users WHERE id = ?"
-        ).get(id);
+            "SELECT * FROM users WHERE email = ?"
+        ).get(email);
 
         if (!user) {
             return res.status(404).json({
@@ -21,20 +20,19 @@ export const updateUser  = (req, res) => {
             db.prepare(`
                 UPDATE users
                 SET password = ?, folder_id = ?
-                WHERE id = ?
-            `).run(password, folder_id, id);
+                WHERE email = ?
+            `).run(password, folder_id, email);
         } else {
-            // User already has a password, only update folderId
             db.prepare(`
                 UPDATE users
                 SET folder_id = ?
-                WHERE id = ?
-            `).run(folder_id, id);
+                WHERE email = ?
+            `).run(folder_id, email);
         }
 
         res.json({
             success: true,
-            message: "User updated successfully"
+            message: "User updated successfully",   
         });
 
     } catch (err) {

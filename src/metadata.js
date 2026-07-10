@@ -9,7 +9,7 @@ export const file_metadata = function({id  , file_name , thumbnailLink, user_id}
             user_id
         )
         VALUES (?, ?, ?, ?)
-    `).run(id, file_name, thumbnailLink, user_id);
+    `).run(id, file_name, thumbnailLink, user_id);    
 
     return response;
 }

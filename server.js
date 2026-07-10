@@ -1,29 +1,40 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import db from "./src/db.js";
 import oauth2Client from "./googleAuth.js";
 import fs from "fs";
 import upload from "./multerConfig.js";
 import { google } from "googleapis";
 import getDriveClient from "./driveClient.js";
-import { callback, login } from "./src/login.js";
+import { callback, signup } from "./src/login.js";
 import { updateUser } from "./src/updateUser.js";
 import { uploadfiles } from "./src/CRUD/upload.js";
+import { login_user } from "./src/CRUD/login_user.js";
+import { all_uploads } from "./src/CRUD/all_uploads.js";
+
+
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.get("/", (req, res) => {
     res.send("Server Running 🚀");
 });
 
-app.get("/login", login);
+app.get("/signup", signup);
 
 app.get("/auth/google/callback", callback);
 
-app.post("/updateUser/:id", updateUser);
+app.post("/updateUser", updateUser);
+
+
+app.post("/login", login_user);
 
 
 app.post("/upload", upload.single("file"), uploadfiles);
+
+app.get("/alluploads/:user_id", all_uploads)
 
 
 
