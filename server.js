@@ -13,6 +13,7 @@ import { uploadfiles } from "./src/CRUD/upload.js";
 import { login_user } from "./src/CRUD/login_user.js";
 import { all_uploads } from "./src/CRUD/all_uploads.js";
 import { add_agent } from "./src/CRUD/add_agent.js";
+import { delete_file } from "./src/CRUD/delete_file.js";
 
 
 dotenv.config();
@@ -35,7 +36,39 @@ app.post("/upload", upload.single("file"), uploadfiles);
 
 app.get("/alluploads/:user_id", all_uploads)
 
-app.post('/add/agent' , add_agent)
+app.post('/add/agent', add_agent)
+
+app.post("/deletefile", delete_file);
+
+
+
+
+
+
+
+
+
+// app.get("/image/:id", async (req, res) => {
+//     const drive = getDriveClient(user);
+
+//     const response = await drive.files.get(
+//         {
+//             fileId: req.params.id,
+//             alt: "media",
+//         },
+//         {
+//             responseType: "stream",
+//         }
+//     );
+
+//     res.setHeader(
+//         "Content-Type",
+//         response.headers["content-type"]
+//     );
+
+//     response.data.pipe(res);
+// });
+
 
 app.get("/files", async (req, res) => {
     const drive = getDriveClient();
@@ -164,7 +197,6 @@ app.put("/replace/:id", upload.single("file"), async (req, res) => {
 
 app.delete("/delete/:id", async (req, res) => {
     const drive = getDriveClient();
-
     try {
 
         await drive.files.delete({

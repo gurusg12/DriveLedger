@@ -47,7 +47,7 @@ export const callback = async (req, res) => {
         data.picture,
         JSON.stringify(tokens)
     );
-        res.redirect("http://localhost:5173/login");
+        res.redirect(process.env.FRONTEND_URL);
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);

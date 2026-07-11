@@ -17,7 +17,7 @@ export const uploadfiles = async function (req, res) {
                 mimeType: req.file.mimetype,
                 body: fs.createReadStream(req.file.path),
             },
-            fields: "id,name,thumbnailLink",
+            fields: "id,name,webContentLink",
         });
 
         const fileId = response.data.id;
@@ -42,7 +42,7 @@ export const uploadfiles = async function (req, res) {
         file_metadata({
             id: fileId,
             file_name: response.data.name,
-            thumbnailLink: file.data.thumbnailLink,
+            thumbnailLink: file.data.webContentLink,
             user_id: id,
             naration01:naration01 , 
             naration02 : naration02
@@ -53,7 +53,7 @@ export const uploadfiles = async function (req, res) {
             file: {
                 id: fileId,
                 name: response.data.name,
-                thumbnailLink: file.data.thumbnailLink,
+                thumbnailLink: file.data.webContentLink,
                 webViewLink: file.data.webViewLink,
                 webContentLink: file.data.webContentLink,
             },
