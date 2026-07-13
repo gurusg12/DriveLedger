@@ -4,7 +4,7 @@ import { file_metadata } from "../metadata.js";
 
 export const uploadfiles = async function (req, res) {
 
-    const { id , naration01 ,naration02 } = req.body
+    const { id , title ,remarks } = req.body
     const { drive, user_folder_id } = getDriveClient(id);
 
     try {
@@ -44,8 +44,8 @@ export const uploadfiles = async function (req, res) {
             file_name: response.data.name,
             thumbnailLink: file.data.webContentLink,
             user_id: id,
-            naration01:naration01 , 
-            naration02 : naration02
+            title: title , 
+            remarks : remarks
         });
         
         res.json({

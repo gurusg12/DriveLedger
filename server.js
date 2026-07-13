@@ -14,6 +14,7 @@ import { login_user } from "./src/CRUD/login_user.js";
 import { all_uploads } from "./src/CRUD/all_uploads.js";
 import { add_agent } from "./src/CRUD/add_agent.js";
 import { delete_file } from "./src/CRUD/delete_file.js";
+import { update_file } from "./src/CRUD/update_file.js";
 
 
 dotenv.config();
@@ -39,6 +40,8 @@ app.get("/alluploads/:user_id", all_uploads)
 app.post('/add/agent', add_agent)
 
 app.post("/deletefile", delete_file);
+
+app.post("/update/file" , update_file)
 
 
 
@@ -162,9 +165,6 @@ app.put("/rename/:id", async (req, res) => {
 
 app.put("/replace/:id", upload.single("file"), async (req, res) => {
 
-
-
-
     const drive = getDriveClient();
 
     try {
@@ -220,6 +220,9 @@ app.delete("/delete/:id", async (req, res) => {
     }
 
 });
+
+
+
 
 
 app.post("/public/:id", async (req, res) => {
