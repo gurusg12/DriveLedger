@@ -15,15 +15,24 @@ import { all_uploads } from "./src/CRUD/all_uploads.js";
 import { add_agent } from "./src/CRUD/add_agent.js";
 import { delete_file } from "./src/CRUD/delete_file.js";
 import { update_file } from "./src/CRUD/update_file.js";
+import { replace_file } from "./src/CRUD/replace_file.js";
+
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.get("/", (req, res) => {
-    res.send("Server Running 🚀");
-});
+
+
+
+
+
 
 app.get("/signup", signup);
 
@@ -41,9 +50,43 @@ app.post('/add/agent', add_agent)
 
 app.post("/deletefile", delete_file);
 
-app.post("/update/file" , update_file)
+app.post("/update/file", update_file)
 
 
+app.post('/replace/file', upload.single('file'), replace_file)
+
+app.put("/replace/:id", upload.single("file"), async (req, res) => {
+
+    const drive = getDriveClient();
+
+    try {
+
+        const response = await drive.files.update({
+
+            fileId: req.params.id,
+
+            media: {
+
+                mimeType: req.file.mimetype,
+
+                body: fs.createReadStream(req.file.path),
+
+            },
+
+        });
+
+
+        fs.unlinkSync(req.file.path);
+
+        res.json(response.data);
+
+    } catch (err) {
+
+        res.status(500).json(err);
+
+    }
+
+});
 
 
 
@@ -163,37 +206,7 @@ app.put("/rename/:id", async (req, res) => {
 
 });
 
-app.put("/replace/:id", upload.single("file"), async (req, res) => {
 
-    const drive = getDriveClient();
-
-    try {
-
-        const response = await drive.files.update({
-
-            fileId: req.params.id,
-
-            media: {
-
-                mimeType: req.file.mimetype,
-
-                body: fs.createReadStream(req.file.path),
-
-            },
-
-        });
-
-        fs.unlinkSync(req.file.path);
-
-        res.json(response.data);
-
-    } catch (err) {
-
-        res.status(500).json(err);
-
-    }
-
-});
 
 app.delete("/delete/:id", async (req, res) => {
     const drive = getDriveClient();
@@ -313,6 +326,15 @@ app.post("/folder", async (req, res) => {
 
 });
 const PORT = process.env.PORT || 3000;
+
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.all("/{*splat}", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

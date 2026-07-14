@@ -4,7 +4,7 @@ import { file_metadata } from "../metadata.js";
 
 export const uploadfiles = async function (req, res) {
 
-    const { id , title ,remarks } = req.body
+    const { id, title, remarks } = req.body
     const { drive, user_folder_id } = getDriveClient(id);
 
     try {
@@ -33,7 +33,7 @@ export const uploadfiles = async function (req, res) {
 
         const file = await drive.files.get({
             fileId,
-            fields: "webViewLink,webContentLink,thumbnailLink",
+            fields: "webViewLink,webContentLink,thumbnailLink,mimeType",
         });
 
 
@@ -44,10 +44,11 @@ export const uploadfiles = async function (req, res) {
             file_name: response.data.name,
             thumbnailLink: file.data.webContentLink,
             user_id: id,
-            title: title , 
-            remarks : remarks
+            title: title,
+            remarks: remarks, 
+            mimeType: file.data.mimeType,
         });
-        
+
         res.json({
             success: true,
             file: {
