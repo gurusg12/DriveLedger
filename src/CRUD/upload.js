@@ -47,6 +47,7 @@ export const uploadfiles = async function (req, res) {
             title: title,
             remarks: remarks, 
             mimeType: file.data.mimeType,
+            webContentLink : file.data.webContentLink
         });
 
         res.json({

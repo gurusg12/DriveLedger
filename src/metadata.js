@@ -1,6 +1,6 @@
 import db from "./db.js"
 
-export const file_metadata = function({id  , file_name , thumbnailLink, user_id , title , remarks ,  mimeType}){
+export const file_metadata = function({id  , file_name , thumbnailLink, user_id , title , remarks ,  mimeType ,  webContentLink}){
     const time = new Date().toLocaleString();
 //    const  = `https://drive.google.com/file/d/${id}/view`;
     //    const imageUrl = `https://drive.google.com/file/d/${id}/view`;
@@ -21,7 +21,7 @@ export const file_metadata = function({id  , file_name , thumbnailLink, user_id 
     } else if (mimeType === "application/pdf") {
         fileUrl = `https://drive.google.com/file/d/${id}/preview`;
     } else if (mimeType.startsWith("audio/")) {
-        fileUrl = `https://drive.google.com/uc?id=${id}`;
+        fileUrl = webContentLink;
     } else {
         fileUrl = `https://drive.google.com/file/d/${id}/view`;
     }

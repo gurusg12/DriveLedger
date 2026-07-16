@@ -17,21 +17,44 @@ import { delete_file } from "./src/CRUD/delete_file.js";
 import { update_file } from "./src/CRUD/update_file.js";
 import { replace_file } from "./src/CRUD/replace_file.js";
 
-import path from "path";
-import { fileURLToPath } from "url";
+// import path from "path";
+// import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+
+const allowedOrigins = [
+  "http://localhost:5173",      // Vite
+  "http://localhost:3000",      // React (if needed)
+  "https://yourdomain.com",
+  "https://www.yourdomain.com"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
 
 
 
 
+
+app.get("/" , (req, res)=>{
+
+    res.json("the server running ")
+
+})
 
 
 app.get("/signup", signup);
@@ -325,14 +348,14 @@ app.post("/folder", async (req, res) => {
     }
 
 });
-const PORT = process.env.PORT || 3000;
+const PORT =  3000;
 
 
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
-app.all("/{*splat}", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+// app.all("/{*splat}", (req, res) => {
+//     res.sendFile(path.join(__dirname, "public", "index.html"));
+// });
 
 
 
